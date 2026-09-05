@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PaymentOps AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .header {
+            background: #111827;
+            color: white;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 25px;
+        }
+
+        .header p {
+            color: #aeb7c8;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .status {
+            background: #173d2b;
+            color: #69e39b;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            margin-bottom: 15px;
+            font-size: 19px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .label {
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .diagnosis {
+            color: #d97706;
+        }
+
+        .confidence {
+            color: #2563eb;
+        }
+
+        .action {
+            color: #059669;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .large-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .large-card h2 {
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #718096;
+        }
+
+        .reason {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .result-success {
+            background: #ecfdf3;
+            color: #047857;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .result-failed {
+            background: #fff1f2;
+            color: #be123c;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .investigation {
+            line-height: 1.7;
+            white-space: pre-line;
+            color: #374151;
+        }
+
+        .incident-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .incident-table td {
+            padding: 10px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .incident-table td:first-child {
+            color: #718096;
+            width: 50%;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+                .control-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .control-card h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .scenario-select {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            color: #172033;
+        }
+
+        .investigate-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .investigate-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .scenario-description {
+            margin-top: 10px;
+            color: #718096;
+            font-size: 13px;
+        }
+                .audit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 5px;
+        }
+
+        .audit-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .audit-table th {
+            text-align: left;
+            color: #718096;
+            font-size: 12px;
+            padding: 12px 10px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .audit-table td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 13px;
+        }
+
+        .audit-action {
+            font-weight: bold;
+        }
+
+        .audit-success {
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .audit-warning {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .audit-safe {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .audit-empty {
+            color: #718096;
+            padding: 15px 0;
+        }
+                .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .metric-label {
+            color: #718096;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .metric-note {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 900px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+                .evaluation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .evaluation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .evaluation-table th {
+            text-align: left;
+            color: #718096;
+            font-size: 12px;
+            padding: 12px 10px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .evaluation-table td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 13px;
+        }
+
+        .outcome-recovered {
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .outcome-protected {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .outcome-safe {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .outcome-stop {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+            .grid,
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div>
+            <h1>PaymentOps AI</h1>
+            <p>AI Payment Incident Manager</p>
+        </div>
+
+        <div class="status">
+            ● System Online
+        </div>
+    </header>
+
+
+    <main class="container">
+
+    <div class="control-card">
+
+        <h2>🔍 Investigate Payment Incident</h2>
+
+        <form method="POST">
+
+            <div class="control-row">
+
+                <select
+                    name="scenario"
+                    class="scenario-select"
+                >
+
+                    <option value="network_timeout"
+                        {% if selected_scenario == "network_timeout" %}selected{% endif %}>
+                        🌐 Network Timeout — Potential Recovery
+                    </option>
+
+                    <option value="risk_decline"
+                        {% if selected_scenario == "risk_decline" %}selected{% endif %}>
+                        🛡️ Risk Decline — Safety Review
+                    </option>
+
+                    <option value="insufficient_funds"
+                        {% if selected_scenario == "insufficient_funds" %}selected{% endif %}>
+                        💳 Insufficient Funds — No Retry
+                    </option>
+
+                    <option value="retry_limit"
+                        {% if selected_scenario == "retry_limit" %}selected{% endif %}>
+                        🛑 Retry Limit Reached — Safety Stop
+                    </option>
+
+                </select>
+
+                <button
+                    type="submit"
+                    class="investigate-btn"
+                >
+                    Investigate Incident
+                </button>
+
+            </div>
+
+        </form>
+
+        <div class="scenario-description">
+            PaymentOps AI will diagnose the incident, evaluate the safety policy,
+            execute only an approved action, and generate a grounded investigation.
+        </div>
+
+    </div>
+            <h2 class="section-title">System Performance</h2>
+
+        <div class="metrics-grid">
+
+            <div class="metric-card">
+                <div class="metric-label">Held-out Diagnosis Accuracy</div>
+                <div class="metric-value">
+                    {{ "{:.0f}".format(metrics.diagnosis_accuracy) }}%
+                </div>
+                <div class="metric-note">
+                    800 synthetic incidents • 160 held-out
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Payment Retries</div>
+                <div class="metric-value">
+                    {{ metrics.payment_retries }}
+                </div>
+                <div class="metric-note">
+                    Controlled evaluation
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Successful Recoveries</div>
+                <div class="metric-value">
+                    {{ metrics.successful_recoveries }}
+                </div>
+                <div class="metric-note">
+                    Simulated evaluation
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Unsafe Automatic Retries</div>
+                <div class="metric-value">
+                    {{ metrics.unsafe_retries }}
+                </div>
+                <div class="metric-note">
+                    Safety evaluation
+                </div>
+            </div>
+
+        </div>
+
+                <div class="evaluation-card">
+
+            <h2>📊 Demonstrated Incident Scenarios</h2>
+
+            <table class="evaluation-table">
+
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>AI Diagnosis</th>
+                        <th>Decision</th>
+                        <th>Outcome</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for item in evaluation_summary %}
+
+                    <tr>
+                        <td>{{ item.scenario }}</td>
+
+                        <td>
+                            {{ item.diagnosis }}
+                        </td>
+
+                        <td>
+                            {{ item.action }}
+                        </td>
+
+                        <td>
+                            {% if item.outcome == "Recovered" %}
+                                <span class="outcome-recovered">
+                                    ✓ {{ item.outcome }}
+                                </span>
+
+                            {% elif item.outcome == "Protected" %}
+                                <span class="outcome-protected">
+                                    🛡 {{ item.outcome }}
+                                </span>
+
+                            {% elif item.outcome == "Retry Avoided" %}
+                                <span class="outcome-safe">
+                                    ✓ {{ item.outcome }}
+                                </span>
+
+                            {% else %}
+                                <span class="outcome-stop">
+                                    🛑 {{ item.outcome }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            ₹{{ "{:,.0f}".format(item.amount) }}
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <div class="metric-note" style="margin-top: 15px;">
+                Representative scenarios demonstrating recovery,
+                protection, retry avoidance, and safety stopping.
+            </div>
+
+        </div>
+
+
+        
+
+
+    <h2 class="section-title">Incident Overview</h2>
+
+        <div class="grid">
+
+            <div class="card">
+                <div class="label">Transaction ID</div>
+                <div class="value">
+                    {{ incident.transaction_id }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Transaction Amount</div>
+                <div class="value">
+                    ₹{{ "{:,.0f}".format(incident.amount) }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Payment Method</div>
+                <div class="value">
+                    {{ incident.method }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="card">
+                <div class="label">AI Diagnosis</div>
+                <div class="value diagnosis">
+                    {{ result.diagnosis }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Model Confidence</div>
+                <div class="value confidence">
+                    {{ "{:.2f}".format(result.confidence * 100) }}%
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Recommended Action</div>
+                <div class="value action">
+                    {{ result.decision.action }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="main-grid">
+
+            <div>
+
+                <div class="large-card">
+
+                    <h2>🔍 Incident Evidence</h2>
+
+                    <table class="incident-table">
+
+                        <tr>
+                            <td>Gateway Response</td>
+                            <td>{{ incident.gateway_response_code }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Gateway Response Time</td>
+                            <td>{{ incident.gateway_response_time_ms }} ms</td>
+                        </tr>
+
+                        <tr>
+                            <td>Issuer</td>
+                            <td>{{ incident.issuer }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Recent Issuer Failures</td>
+                            <td>{{ incident.recent_same_issuer_failures }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Recent Method Failures</td>
+                            <td>{{ incident.recent_same_method_failures }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>5-Minute Failure Rate</td>
+                            <td>{{ incident.failure_rate_last_5min }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Risk Score</td>
+                            <td>{{ incident.risk_score }}</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+                <div class="large-card">
+
+                    <h2>⚡ Decision Engine</h2>
+
+                    <div class="info-row">
+                        <span class="info-label">Action</span>
+                        <strong>{{ result.decision.action }}</strong>
+                    </div>
+
+                    <div class="reason">
+                        {{ result.decision.reason }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="large-card">
+
+                    <h2>💰 Recovery Result</h2>
+
+                    {% if result.result.status == "SUCCESS" %}
+
+                        <div class="result-success">
+                            ✓ {{ result.result.message }}
+                            <br><br>
+                            Amount recovered:
+                            ₹{{ "{:,.0f}".format(result.result.amount_recovered) }}
+                        </div>
+
+                    {% else %}
+
+                        <div class="result-failed">
+                            {{ result.result.message }}
+                            <br><br>
+                            Amount recovered:
+                            ₹{{ "{:,.0f}".format(result.result.amount_recovered) }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="large-card">
+
+                    <h2>🤖 AI Investigation</h2>
+
+                    <div class="investigation">
+                        {{ result.explanation }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+                <div class="audit-card">
+
+            <h2>📋 Audit Trail</h2>
+
+            {% if audit_records %}
+
+                <table class="audit-table">
+
+                    <thead>
+                        <tr>
+                            <th>Transaction</th>
+                            <th>Diagnosis</th>
+                            <th>Action</th>
+                            <th>Result</th>
+                            <th>Recovered</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for record in audit_records %}
+
+                            <tr>
+
+                                <td>
+                                    {{ record.transaction_id }}
+                                </td>
+
+                                <td>
+                                    {{ record.diagnosis }}
+                                </td>
+
+                                <td class="audit-action">
+                                    {{ record.action }}
+                                </td>
+
+                                <td>
+                                    {% if record.result == "SUCCESS" %}
+                                        <span class="audit-success">
+                                            ✓ {{ record.result }}
+                                        </span>
+
+                                    {% elif record.result in ["HUMAN_REVIEW", "ESCALATED"] %}
+                                        <span class="audit-warning">
+                                            {{ record.result }}
+                                        </span>
+
+                                    {% else %}
+                                        <span class="audit-safe">
+                                            {{ record.result }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    ₹{{ "{:,.0f}".format(record.amount_recovered) }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <div class="audit-empty">
+                    No audit records yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+
+    <footer class="footer">
+        PaymentOps AI · Autonomous payment incident investigation & safe recovery
+    </footer>
+
+</body>
+</html>
