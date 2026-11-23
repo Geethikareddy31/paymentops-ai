@@ -246,6 +246,14 @@ System performance metrics
 Demonstrated scenarios
 Audit Trail
 
+## Screenshots
+
+### Web Dashboard
+![PaymentOps AI Dashboard](docs/screenshots/dashboard.png)
+
+### Incident Investigation (CLI)
+![Terminal output](docs/screenshots/terminal-output.png)
+
 🧰 Tech Stack
 Python
 Flask
